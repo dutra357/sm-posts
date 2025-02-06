@@ -3,11 +3,10 @@ package com.dutra.sm_posts.controllers;
 import com.dutra.sm_posts.models.dtos.UserDto;
 import com.dutra.sm_posts.services.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -27,5 +26,12 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserDto> findById(@PathVariable String id) {
         return ResponseEntity.ok(userService.findById(id));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserDto> insertUser(@RequestBody UserDto userDto) {
+        userDto = userService.insertUser(userDto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(userDto);
     }
 }
