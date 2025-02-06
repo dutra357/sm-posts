@@ -2,6 +2,7 @@ package com.dutra.sm_posts.controllers;
 
 import com.dutra.sm_posts.models.dtos.UserDto;
 import com.dutra.sm_posts.services.UserService;
+import org.springframework.data.mongodb.repository.Update;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -33,5 +34,18 @@ public class UserController {
         userDto = userService.insertUser(userDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<UserDto> updateuser(@PathVariable String id, @RequestBody UserDto userDto) {
+        userDto = userService.updateUser(id, userDto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
+        return ResponseEntity.created(uri).body(userDto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<UserDto> deleteuser(@PathVariable String id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 }
