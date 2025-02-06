@@ -23,6 +23,10 @@ public class User {
         this.email = email;
     }
 
+    public List<Post> getPosts() {
+        return posts;
+    }
+
     public String getId() {
         return id;
     }
