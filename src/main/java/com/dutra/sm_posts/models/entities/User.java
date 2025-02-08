@@ -13,8 +13,9 @@ public class User {
     private String id;
     private String name;
     private String email;
+
     @DBRef(lazy = true)
-    public final List<Post> posts = new ArrayList<>();
+    public List<Post> posts = new ArrayList<>();
 
     public User() {}
     public User(String id, String name, String email) {

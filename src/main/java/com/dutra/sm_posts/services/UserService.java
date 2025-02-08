@@ -1,5 +1,6 @@
 package com.dutra.sm_posts.services;
 
+import com.dutra.sm_posts.models.dtos.PostDto;
 import com.dutra.sm_posts.models.dtos.UserDto;
 import com.dutra.sm_posts.models.entities.User;
 import com.dutra.sm_posts.repositories.UserRepository;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @Service
 public class UserService {
-
     private final UserRepository userRepository;
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -22,6 +22,11 @@ public class UserService {
 
     public UserDto findById(String id) {
         return new UserDto(getEntityById(id));
+    }
+
+    public List<PostDto> getUserPosts(String id) {
+        User user = getEntityById(id);
+        return user.getPosts().stream().map(PostDto::new).toList();
     }
 
     public UserDto insertUser(UserDto userDto) {
@@ -40,14 +45,14 @@ public class UserService {
         return new UserDto(userRepository.save(user));
     }
 
-    private void copyDtoToEntity(UserDto userDto, User user) {
-        user.setEmail(userDto.getEmail());
-        user.setName(userDto.getName());
-    }
-
     public void deleteUser(String id) {
         getEntityById(id);
         userRepository.deleteById(id);
+    }
+
+    private void copyDtoToEntity(UserDto userDto, User user) {
+        user.setEmail(userDto.getEmail());
+        user.setName(userDto.getName());
     }
 
     private User getEntityById(String id) {

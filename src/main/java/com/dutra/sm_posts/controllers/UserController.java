@@ -1,6 +1,8 @@
 package com.dutra.sm_posts.controllers;
 
+import com.dutra.sm_posts.models.dtos.PostDto;
 import com.dutra.sm_posts.models.dtos.UserDto;
+import com.dutra.sm_posts.models.entities.Post;
 import com.dutra.sm_posts.services.UserService;
 import org.springframework.data.mongodb.repository.Update;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +31,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @GetMapping(value = "/{id}/posts")
+    public ResponseEntity<List<PostDto>> getUserPosts(@PathVariable String id) {
+        return ResponseEntity.ok(userService.getUserPosts(id));
+    }
+
     @PostMapping
     public ResponseEntity<UserDto> insertUser(@RequestBody UserDto userDto) {
         userDto = userService.insertUser(userDto);
@@ -37,7 +44,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<UserDto> updateuser(@PathVariable String id, @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
         userDto = userService.updateUser(id, userDto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(userDto.getId()).toUri();
         return ResponseEntity.created(uri).body(userDto);
